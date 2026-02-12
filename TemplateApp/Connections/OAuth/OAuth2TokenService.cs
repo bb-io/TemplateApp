@@ -1,9 +1,10 @@
-﻿using System.Globalization;
-using Blackbird.Applications.Sdk.Common;
+﻿using Blackbird.Applications.Sdk.Common;
+using Blackbird.Applications.Sdk.Common.Authentication;
 using Blackbird.Applications.Sdk.Common.Authentication.OAuth2;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Newtonsoft.Json;
 using RestSharp;
+using System.Globalization;
 using TemplateApp.Constants;
 using TemplateApp.Invocables;
 
@@ -12,7 +13,7 @@ namespace TemplateApp.Connections.OAuth;
 /// <summary>
 /// Manages user OAuth credentials
 /// </summary>
-public class OAuth2TokenService(InvocationContext invocationContext) : AppInvocable(invocationContext), IOAuth2TokenService
+public class OAuth2TokenService(InvocationContext invocationContext) : AppInvocable(invocationContext), IOAuth2TokenService, ITokenRefreshable
 {
     #region Token actions
 
@@ -23,6 +24,23 @@ public class OAuth2TokenService(InvocationContext invocationContext) : AppInvoca
     public bool IsRefreshToken(Dictionary<string, string> values)
         => DateTime.UtcNow > DateTime.Parse(values[CredsNames.ExpiresAtKeyName], CultureInfo.InvariantCulture);
 
+    /// <summary>
+    /// Gets the time in minutes until the token expires
+    /// </summary>
+    /// <param name="values"></param>
+    /// <returns></returns>
+    public int? GetRefreshTokenExprireInMinutes(Dictionary<string, string> values)
+    {
+        if (!values.TryGetValue(CredsNames.ExpiresAtKeyName, out var expireValue))
+            return null;
+
+        if (!DateTime.TryParse(expireValue, out var expireDate))
+            return null;
+
+        var difference = expireDate - DateTime.UtcNow;
+
+        return (int)difference.TotalMinutes - 1;
+    }
 
     /// <summary>
     /// Receives authorization credentials after user passed OAuth

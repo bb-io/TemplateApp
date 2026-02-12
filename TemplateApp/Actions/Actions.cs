@@ -9,7 +9,6 @@ using TemplateApp.Invocables;
 using TemplateApp.Models.Dto;
 using TemplateApp.Models.Request;
 using TemplateApp.Models.Response;
-using TemplateApp.RestSharp;
 
 namespace TemplateApp.Actions;
 
@@ -17,18 +16,8 @@ namespace TemplateApp.Actions;
 /// Contains list of actions
 /// </summary>
 [ActionList]
-public class Actions : AppInvocable
+public class Actions(InvocationContext invocationContext) : AppInvocable (invocationContext)
 {
-    #region Constructors
-
-    public Actions(InvocationContext invocationContext) : base(invocationContext)
-    {
-    }
-
-    #endregion
-
-    #region Actions
-
     /// <summary>
     /// Retrieves list of items, takes no action parameters
     /// </summary>
@@ -36,7 +25,7 @@ public class Actions : AppInvocable
     [Action("List berries", Description = "List berries")]
     public async Task<ListBerriesResponse> ListItems()
     {
-        var request = new AppRestRequest(ApiEndpoints.Berry, Method.Get, Creds);
+        var request = new RestRequest(ApiEndpoints.Berry, Method.Get);
         var response = await Client.ExecuteWithHandling<ListResponse<Berry>>(request);
 
         return new(response.Results);
@@ -50,7 +39,7 @@ public class Actions : AppInvocable
     [Action("Get berry", Description = "Get specific berry by ID")]
     public Task<Berry> GetBerry([ActionParameter] GetBerryRequest input)
     {
-        var request = new AppRestRequest($"{ApiEndpoints.Berry}/{input.BerryName}", Method.Get, Creds);
+        var request = new RestRequest($"{ApiEndpoints.Berry}/{input.BerryName}", Method.Get);
 
         return Client.ExecuteWithHandling<Berry>(request);
     }
@@ -77,7 +66,7 @@ public class Actions : AppInvocable
     [Action("Create callback", Description = "Create action callback")]
     public Task CreateCallback([ActionParameter] CreateCallbackRequest input)
     {
-        var request = new AppRestRequest(ApiEndpoints.Callbacks, Method.Post, Creds);
+        var request = new RestRequest(ApiEndpoints.Callbacks, Method.Post);
         request.AddJsonBody(input);
 
         return Client.ExecuteWithHandling(request);
@@ -91,6 +80,4 @@ public class Actions : AppInvocable
     {
         return input;
     }
-
-    #endregion
 }

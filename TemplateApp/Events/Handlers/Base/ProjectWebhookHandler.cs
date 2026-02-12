@@ -1,29 +1,22 @@
 ﻿using Blackbird.Applications.Sdk.Common.Authentication;
+using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Common.Webhooks;
 using RestSharp;
 using TemplateApp.Constants;
-using TemplateApp.RestSharp;
 using TemplateApp.Events.Models.Inputs;
 using TemplateApp.Events.Models.Request;
+using TemplateApp.Invocables;
 
 namespace TemplateApp.Events.Handlers.Base;
 
 /// <summary>
 /// Base handler for webhooks with project ID parameter
 /// </summary>
-public abstract class ProjectWebhookHandler : IWebhookEventHandler
+public abstract class ProjectWebhookHandler(InvocationContext invocationContext, [WebhookParameter] ProjectWebhookInput input) : AppInvocable(invocationContext), IWebhookEventHandler
 {
     protected abstract string SubscriptionEvent { get; }
-    private string ProjectId { get; }
-    private AppRestClient Client { get; }
+    private string ProjectId { get; } = input.ProjectId;
 
-    // Handler takes parameter that is specified by user when event bird is created
-    protected ProjectWebhookHandler([WebhookParameter] ProjectWebhookInput input)
-    {
-        ProjectId = input.ProjectId;
-        Client = new();
-    }
-    
     /// <summary>
     /// Subscribes to a webhook event
     /// </summary>
@@ -32,7 +25,7 @@ public abstract class ProjectWebhookHandler : IWebhookEventHandler
         Dictionary<string, string> values)
     {
         var endpoint = $"{ApiEndpoints.Projects}/{ProjectId}{ApiEndpoints.Webhooks}";
-        var request = new AppRestRequest(endpoint, Method.Post, creds);
+        var request = new RestRequest(endpoint, Method.Post);
         request.AddJsonBody(new AddWebhookRequest
         {
             // Webhook bird url that will receive webhook data
@@ -50,7 +43,7 @@ public abstract class ProjectWebhookHandler : IWebhookEventHandler
         Dictionary<string, string> values)
     {
         var endpoint = $"{ApiEndpoints.Projects}/{ProjectId}{ApiEndpoints.Webhooks}";
-        var request = new AppRestRequest(endpoint, Method.Delete, creds);
+        var request = new RestRequest(endpoint, Method.Delete);
         request.AddJsonBody(new AddWebhookRequest
         {
             Url = values["payloadUrl"],

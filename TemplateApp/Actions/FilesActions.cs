@@ -15,16 +15,9 @@ namespace TemplateApp.Actions;
 /// Contains list of file actions
 /// </summary>
 [ActionList]
-public class FilesActions : AppInvocable
+public class FilesActions(InvocationContext invocationContext, IFileManagementClient _fileManagementClient) : AppInvocable(invocationContext)
 {
     // Injecting instance of IFileManagementClient that helps to work with files inside of Blackbird
-    private readonly IFileManagementClient _fileManagementClient;
-
-    protected FilesActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : base(
-        invocationContext)
-    {
-        _fileManagementClient = fileManagementClient;
-    }
     
     /// <summary>
     /// Demonstration of downloading file with IFileManagementClient

@@ -4,7 +4,6 @@ using Blackbird.Applications.Sdk.Common.Invocation;
 using RestSharp;
 using TemplateApp.Invocables;
 using TemplateApp.Models.Request;
-using TemplateApp.RestSharp;
 
 namespace TemplateApp.DataSourceHandlers;
 
@@ -33,7 +32,7 @@ public class DataSourceHandlerWithParameters : AppInvocable, IAsyncDataSourceIte
             throw new("You should input Entity ID first");
 
         // Fetching data based on provided parameters
-        var request = new AppRestRequest($"{_request.Url}/{_request.EntityId}", Method.Get, Creds);
+        var request = new RestRequest($"{_request.Url}/{_request.EntityId}", Method.Get);
         return await Client.ExecuteWithHandling<IEnumerable<DataSourceItem>>(request);
     }
 }

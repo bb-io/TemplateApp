@@ -14,24 +14,15 @@ public class ConnectionDefinition : IConnectionDefinition
     /// </summary>
     public IEnumerable<ConnectionPropertyGroup> ConnectionPropertyGroups => new List<ConnectionPropertyGroup>
     {
-        // OAuth example
-        // new()
-        // {
-        //     Name = "OAuth2",
-        //     AuthenticationType = ConnectionAuthenticationType.OAuth2,
-        //     ConnectionUsage = ConnectionUsage.Actions,
-        //     ConnectionProperties = new List<ConnectionProperty>()
-        // },
-
         // API token auth example
         new()
         {
-            Name = "Developer API token",
+            Name = "Credentials",
             AuthenticationType = ConnectionAuthenticationType.Undefined,
 
             // Specifying properties that we will need for authorization of the app
-            ConnectionProperties = new List<ConnectionProperty>
-            {
+            ConnectionProperties =
+            [
                 new(CredsNames.ApiToken)
                 {
                     // Property user-friendly name that will be displayed on the UI
@@ -57,7 +48,22 @@ public class ConnectionDefinition : IConnectionDefinition
                     // Array of objects where first element is a value needed for the API and second element is a user-friendly name.
                     DataItems = [new("v1", "Version 1"), new("v2", "Version 2")]
                 }
-            }
+            ]
+        },
+
+        // OAuth example. An App can have multiple different connections and types
+        new()
+        {
+            Name = "OAuth",
+            AuthenticationType = ConnectionAuthenticationType.OAuth2,
+            ConnectionProperties =
+            [
+                new(CredsNames.Url)
+                {
+                    DisplayName = "URL",
+                    Sensitive = false
+                }
+            ]
         }
     };
 
@@ -70,12 +76,17 @@ public class ConnectionDefinition : IConnectionDefinition
     public IEnumerable<AuthenticationCredentialsProvider> CreateAuthorizationCredentialsProviders(
         Dictionary<string, string> values)
     {
-        // Processing OAuth credentials
-        // var accessToken = values.First(v => v.Key == CredsNames.AccessToken);
-        // yield return new AuthenticationCredentialsProvider("Authorization", $"Bearer {accessToken.Value}");
+        var providers = new List<AuthenticationCredentialsProvider>();
 
-        // Processing API key credentials
-        var apiKey = values.First(v => v.Key == CredsNames.ApiToken);
-        yield return new AuthenticationCredentialsProvider(apiKey.Key, apiKey.Value);
+        string? token = values.FirstOrDefault(v => v.Key == CredsNames.AccessToken).Value;
+        if (token != null)
+            providers.Add(new("Authorization", $"Bearer {token}"));
+
+        foreach (var kv in values.Where(x => x.Key != CredsNames.AccessToken))
+            providers.Add(new AuthenticationCredentialsProvider(kv.Key, kv.Value));
+
+        // Optionally you can also add extra variables such as the connection type
+        
+        return providers;
     }
 }

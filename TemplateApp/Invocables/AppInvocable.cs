@@ -1,7 +1,6 @@
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Authentication;
 using Blackbird.Applications.Sdk.Common.Invocation;
-using TemplateApp.RestSharp;
 
 namespace TemplateApp.Invocables;
 
@@ -24,7 +23,7 @@ public class AppInvocable : BaseInvocable
 
     protected AppInvocable(InvocationContext invocationContext) : base(invocationContext)
     {
-        Client = new();
+        Client = new(Creds);
     }
 
     #endregion

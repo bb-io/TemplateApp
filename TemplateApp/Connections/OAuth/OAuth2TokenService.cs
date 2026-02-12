@@ -5,19 +5,15 @@ using Blackbird.Applications.Sdk.Common.Invocation;
 using Newtonsoft.Json;
 using RestSharp;
 using TemplateApp.Constants;
-using TemplateApp.RestSharp;
+using TemplateApp.Invocables;
 
 namespace TemplateApp.Connections.OAuth;
 
 /// <summary>
 /// Manages user OAuth credentials
 /// </summary>
-public class OAuth2TokenService : BaseInvocable, IOAuth2TokenService
+public class OAuth2TokenService(InvocationContext invocationContext) : AppInvocable(invocationContext), IOAuth2TokenService
 {
-    public OAuth2TokenService(InvocationContext invocationContext) : base(invocationContext)
-    {
-    }
-
     #region Token actions
 
     /// <summary>
@@ -113,7 +109,9 @@ public class OAuth2TokenService : BaseInvocable, IOAuth2TokenService
             throw new InvalidOperationException($"Invalid response content: {responseContent}");
 
         var expiresIn = int.Parse(resultDictionary["expires_in"]);
-        var expiresAt = DateTime.UtcNow.AddSeconds(expiresIn);
+
+        // Add a 2 minute buffer so Blackbird can fetch a token before it expires
+        var expiresAt = DateTime.UtcNow.AddSeconds(expiresIn - 120);
 
         resultDictionary[CredsNames.ExpiresAtKeyName] = expiresAt.ToString(CultureInfo.InvariantCulture);
         return resultDictionary;
@@ -128,11 +126,10 @@ public class OAuth2TokenService : BaseInvocable, IOAuth2TokenService
     private async Task<RestResponse> ExecuteTokenRequest(Dictionary<string, string> bodyParameters,
         CancellationToken cancellationToken)
     {
-        using var client = new AppRestClient();
         var request = new RestRequest(Urls.Token, Method.Post);
         bodyParameters.ToList().ForEach(x => request.AddParameter(x.Key, x.Value));
 
-        return await client.ExecuteAsync(request, cancellationToken);
+        return await Client.ExecuteAsync(request, cancellationToken);
     }
 
     #endregion

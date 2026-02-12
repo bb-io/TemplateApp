@@ -6,12 +6,8 @@ using TemplateApp.Constants;
 
 namespace TemplateApp.Connections.OAuth;
 
-public class OAuth2AuthorizeService : BaseInvocable, IOAuth2AuthorizeService 
+public class OAuth2AuthorizeService(InvocationContext invocationContext) : BaseInvocable(invocationContext), IOAuth2AuthorizeService 
 {
-    public OAuth2AuthorizeService(InvocationContext invocationContext) : base(invocationContext)
-    {
-    }
-
     /// <summary>
     /// Creates OAuth url for the user
     /// </summary>

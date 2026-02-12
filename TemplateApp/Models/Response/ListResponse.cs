@@ -2,5 +2,5 @@
 
 public class ListResponse<T>
 {
-    public T[] Results { get; set; }
+    public T[] Results { get; set; } = [];
 }

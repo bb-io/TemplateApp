@@ -1,5 +1,4 @@
-﻿using Blackbird.Applications.Sdk.Common;
-using Blackbird.Applications.Sdk.Common.Exceptions;
+﻿using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Common.Webhooks;
 using Newtonsoft.Json;

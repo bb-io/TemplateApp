@@ -1,25 +1,25 @@
+using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Authentication;
 using Blackbird.Applications.Sdk.Common.Connections;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using RestSharp;
 using TemplateApp.Constants;
-using TemplateApp.Invocables;
 
 namespace TemplateApp.Connections;
 
 /// <summary>
 /// Validates app credentials that were provided by the user
 /// </summary>
-public class ConnectionValidator(InvocationContext invocationContext) : AppInvocable(invocationContext), IConnectionValidator
+public class ConnectionValidator(InvocationContext invocationContext) : BaseInvocable(invocationContext), IConnectionValidator
 {    
     public async ValueTask<ConnectionValidationResponse> ValidateConnection(IEnumerable<AuthenticationCredentialsProvider> authProviders, CancellationToken cancellationToken)
     {
-        var client = new AppRestClient(authProviders);
-        var request = new RestRequest(ApiEndpoints.Berry, Method.Get);
-
         try
         {
-            var response = await Client.ExecuteAsync(request);
+            var client = new AppRestClient(authProviders);
+            var request = new RestRequest(ApiEndpoints.Berry, Method.Get);
+
+            var response = await client.ExecuteAsync(request);
 
             // Typically you'll want to use the least complex way to validate if a connection is valid.
             var isValid = response.StatusCode != System.Net.HttpStatusCode.Unauthorized;

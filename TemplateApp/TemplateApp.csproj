@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
         <Product>TemplateApp</Product>
         <Description>An example of Blackbird app</Description>
-        <Version>1.0.0</Version>
+        <Version>1.0.1</Version>
         <AssemblyName>Apps.TemplateApp</AssemblyName>
     </PropertyGroup>
 
@@ -15,4 +15,7 @@
       <PackageReference Include="Blackbird.Applications.Sdk.Utils" Version="1.1.0-rc.8709" />
     </ItemGroup>
 
+    <ItemGroup>
+        <EmbeddedResource Include="..\README.md" Link="README.md" CopyToOutputDirectory="Always" />
+    </ItemGroup>
 </Project>

@@ -22,7 +22,7 @@ public class Actions(InvocationContext invocationContext) : AppInvocable (invoca
     /// Retrieves list of items, takes no action parameters
     /// </summary>
     /// <returns>List of created items</returns>
-    [Action("List berries", Description = "List berries")]
+    [Action("List berries", Description = "Outputs berries from the catalog.")]
     public async Task<ListBerriesResponse> ListItems()
     {
         var request = new RestRequest(ApiEndpoints.Berry, Method.Get);
@@ -36,7 +36,7 @@ public class Actions(InvocationContext invocationContext) : AppInvocable (invoca
     /// </summary>
     /// <param name="input">Action parameter with the data for creation a new item</param>
     /// <returns>Newly created item</returns>
-    [Action("Get berry", Description = "Get specific berry by ID")]
+    [Action("Get berry", Description = "Finds a berry by name and outputs its details.")]
     public Task<Berry> GetBerry([ActionParameter] GetBerryRequest input)
     {
         var request = new RestRequest($"{ApiEndpoints.Berry}/{input.BerryName}", Method.Get);
@@ -49,7 +49,7 @@ public class Actions(InvocationContext invocationContext) : AppInvocable (invoca
     /// </summary>
     /// <param name="input">Action parameter with the data for downloading the file</param>
     /// <returns>File data</returns>
-    [Action("Download file by URL", Description = "Download specific file by URL")]
+    [Action("Download file by URL", Description = "Downloads a file from the supplied URL and outputs it for later steps.")]
     public Task<FileResponse> DownloadFileByUrl([ActionParameter] DownloadFileRequest input)
     {
         // Creating file instance that will be asynchronously downloaded by Blackbird
@@ -63,7 +63,7 @@ public class Actions(InvocationContext invocationContext) : AppInvocable (invoca
     /// Creates action callback that can be received later in a BlackBird webhook
     /// </summary>
     /// <param name="input">Callback creation data</param>
-    [Action("Create callback", Description = "Create action callback")]
+    [Action("Create callback", Description = "Registers a callback to be sent to the supplied URL.")]
     public Task CreateCallback([ActionParameter] CreateCallbackRequest input)
     {
         var request = new RestRequest(ApiEndpoints.Callbacks, Method.Post);
@@ -75,7 +75,7 @@ public class Actions(InvocationContext invocationContext) : AppInvocable (invoca
     /// <summary>
     /// Demonstration of dynamic input with parameters
     /// </summary>
-    [Action("Dynamic input with parameters", Description = "Demonstration of dynamic input with parameters")]
+    [Action("Dynamic input with parameters", Description = "Uses the Entity ID and URL to populate the Dynamic input options and outputs the supplied values.")]
     public DataSourceWithParametersRequest DynamicInputWithParameters([ActionParameter] DataSourceWithParametersRequest input)
     {
         return input;

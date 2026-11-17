@@ -22,7 +22,7 @@ public class PollingList : AppInvocable
 
     #endregion
 
-    [PollingEvent("On polled event", "This is triggered periodically, depending on the user's prefered input.")]
+    [PollingEvent("On polled event", "Triggers when new berries appear in the catalog and outputs them.")]
     public async Task<PollingEventResponse<Memory, PollingResponse>> OnProjectCreated(PollingEventRequest<Memory> request, 
         [PollingEventParameter][Display("Project status")] string status)
     {

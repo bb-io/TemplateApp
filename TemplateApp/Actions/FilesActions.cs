@@ -24,7 +24,7 @@ public class FilesActions(InvocationContext invocationContext, IFileManagementCl
     /// </summary>
     /// <param name="input">Action parameter with the data for downloading the file</param>
     /// <returns>File data</returns>
-    [Action("Download file", Description = "Download specific file")]
+    [Action("Download file", Description = "Downloads a file from the supplied URL.")]
     public async Task<FileResponse> DownloadFile([ActionParameter] DownloadFileRequest input)
     {
         var request = new RestRequest(input.FileUrl);
@@ -45,7 +45,7 @@ public class FilesActions(InvocationContext invocationContext, IFileManagementCl
     /// </summary>
     /// <param name="input">Action parameter with the data for downloading the file</param>
     /// <returns>File data</returns>
-    [Action("Download large file", Description = "Download a large file efficiently")]
+    [Action("Download large file", Description = "Downloads a large file from the supplied URL while keeping memory use low.")]
     public async Task<FileResponse> DownloadLargeFile([ActionParameter] DownloadFileRequest input)
     {
         // In this case the Blackbird core will download the file efficiently, without a strain on time or memory.
@@ -59,7 +59,7 @@ public class FilesActions(InvocationContext invocationContext, IFileManagementCl
     /// </summary>
     /// <param name="input">Action parameter with the data for downloading the file</param>
     /// <returns>File data</returns>
-    [Action("Upload file", Description = "Upload specific file")]
+    [Action("Upload file", Description = "Uploads a file to the supplied URL.")]
     public async Task UploadFile([ActionParameter] UploadFileRequest input)
     {
         // Downloading input file from Blackbird into a stream

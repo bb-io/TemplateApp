@@ -27,21 +27,21 @@ public class WebhookList : AppInvocable
     /// <summary>
     /// Receives and processes data when item is created
     /// </summary>
-    [Webhook("On item created", typeof(ItemCreatedHandler), Description = "Triggers when an item is created and outputs its ID and title.")]
+    [Webhook("On item created", typeof(ItemCreatedHandler), Description = "On item created")]
     public Task<WebhookResponse<ItemPayload>> OnItemCreated(WebhookRequest webhookRequest)
         => HandlerWebhook<ItemPayload>(webhookRequest);    
     
     /// <summary>
     /// Receives and processes data when item is created
     /// </summary>
-    [Webhook("On project item created", typeof(ProjectItemCreatedHandler), Description = "Triggers when an item is created in the selected project and outputs its ID and title.")]
+    [Webhook("On project item created", typeof(ProjectItemCreatedHandler), Description = "On project item created")]
     public Task<WebhookResponse<ItemPayload>> OnProjectItemCreated(WebhookRequest webhookRequest)
         => HandlerWebhook<ItemPayload>(webhookRequest);
 
     /// <summary>web
     /// Receives and processes a callback
     /// </summary>
-    [Webhook("On callback received", Description = "Triggers when a callback arrives and outputs its data.")]
+    [Webhook("On callback received", Description = "On callback received")]
     public Task<WebhookResponse<CallbackPayload>> OnCallbackReceived(WebhookRequest webhookRequest)
         => HandlerWebhook<CallbackPayload>(webhookRequest);
 

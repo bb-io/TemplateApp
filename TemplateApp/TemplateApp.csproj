@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
         <Product>TemplateApp</Product>
         <Description>An example of Blackbird app</Description>
-        <Version>1.0.1</Version>
+        <Version>1.0.0</Version>
         <AssemblyName>Apps.TemplateApp</AssemblyName>
     </PropertyGroup>
 

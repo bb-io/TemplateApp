@@ -2,49 +2,17 @@
 
 This repository serves as an example of how to write plugins for the BlackBird platform.
 
-<!-- begin docs -->
-
 ## Actions
 
-### General
+Actions represent specific tasks or operations that can be executed within our platform. To find the available actions and their implementation details, navigate to the `Actions` directory in the codebase.
 
-- **List berries** Outputs berries from the catalog.
-- **Get berry** Finds a berry by name and outputs its details.
-- **Download file by URL** Downloads a file from the supplied URL and outputs it for later steps.
-- **Create callback** Registers a callback to be sent to the supplied URL.
-  - **Action** — The action to associate with the callback.
-- **Dynamic input with parameters** Uses the Entity ID and URL to populate the Dynamic input options and outputs the supplied values.
+In this directory, you will find file with list of actions.
 
-### Files
+## Webhooks
 
-- **Download file** Downloads a file from the supplied URL.
-- **Download large file** Downloads a large file from the supplied URL while keeping memory use low.
-- **Upload file** Uploads a file to the supplied URL.
-
-## Events
-
-### Items
-
-- **On item created** Triggers when an item is created and outputs its ID and title.
-- **On project item created** Triggers when an item is created in the selected project and outputs its ID and title.
-
-### Callbacks
-
-- **On callback received** Triggers when a callback arrives and outputs its data.
-
-### Berries
-
-- **On polled event** Triggers when new berries appear in the catalog and outputs them.
+Webhooks enable the Template App to communicate with external services or applications in real-time. When specific events occur, our platform will send HTTP POST requests to the defined webhook endpoints. To view and manage the webhooks, go to the `Webhooks` directory in the codebase. You can also find `Handlers` and `Payloads` there. Handlers are used to manage webhook subscription when bird is created/deleted. Payloads represent webhook response data.
 
 ## Connections
 
-The template shows two connection types in [ConnectionDefinition.cs](TemplateApp/Connections/ConnectionDefinition.cs).
-
-- **Credentials** — Enter an **API token** and select an **API version**.
-- **OAuth** — Enter the service **URL** and authorize the connection.
-
-The [OAuth connection services](TemplateApp/Connections/OAuth) show how to build the authorization URL and manage OAuth credentials.
-
-<!-- end docs -->
-
-See the [developer notes](TemplateApp/Readme.md) for the sample code layout.
+Connections in the Template App are used to establish and manage connections to external services or APIs. They provide the necessary authentication and authorization details for interacting with these services securely. To explore existing connections or add new ones, head to the `Connections` directory and open the `ConnectionDefinition.cs` file.
+In `OAuth` folder you can see OAuth management services. `OAuth2AuthorizeService` is responsible for building OAuth url for user authorization and `OAuth2TokenService` is used for managing user OAuth credentials.
